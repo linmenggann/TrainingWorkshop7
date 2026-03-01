@@ -255,12 +255,53 @@
     </div>
 
     <script>
+        // 您的專屬 Google Apps Script API 網址
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz5ASMHu89qJXNPHejY26CUEB54pwD1729KLEFih0_KNsV4yTZvzIHvp3wjoriyMAsf/exec';
+        const MAX_CAPACITY = 4;
+
+        // 頁面載入時自動檢查是否額滿
+        window.addEventListener('DOMContentLoaded', async () => {
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // 暫時鎖定按鈕，顯示檢查中
+            submitBtn.innerHTML = '<span>⏳ 檢查名額中...</span>';
+            submitBtn.disabled = true;
+
+            try {
+                // 利用原本做給儀表板的 GET API 取得目前報名資料
+                const response = await fetch(scriptURL);
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    if (result.data.length >= MAX_CAPACITY) {
+                        // 已經額滿：改變按鈕樣式、顯示額滿文字，並禁用所有輸入框
+                        submitBtn.innerHTML = '<span>🚫 本活動已額滿</span>';
+                        submitBtn.classList.remove('from-purple-600', 'to-pink-500', 'hover:scale-105', 'hover:shadow-purple-500/50');
+                        submitBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                        submitBtn.style.background = '#9ca3af'; // 強制覆蓋漸層為灰色
+                        
+                        const formElements = document.getElementById('registrationForm').elements;
+                        for (let i = 0; i < formElements.length; i++) {
+                            formElements[i].disabled = true;
+                        }
+                    } else {
+                        // 尚有名額：恢復按鈕狀態，開放報名
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }
+            } catch (error) {
+                console.error('名額檢查失敗:', error);
+                // 若連線異常無法檢查，先開放填寫，由後端的防線來阻擋
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
         async function handleFormSubmit(event) {
             // 阻止表單默認提交行為
             event.preventDefault();
-            
-            // 您的專屬 Google Apps Script API 網址
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbz5ASMHu89qJXNPHejY26CUEB54pwD1729KLEFih0_KNsV4yTZvzIHvp3wjoriyMAsf/exec';
             
             // 取得提交按鈕並更改狀態為傳送中
             const submitBtn = event.target.querySelector('button[type="submit"]');
