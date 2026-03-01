@@ -50,9 +50,20 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #9333ea; 
         }
+
+        /* 新增背景圖片樣式 */
+        .bg-custom-image {
+            /* 加入半透明漸層覆蓋層，確保玻璃卡片清晰可見 */
+            background-image: 
+                linear-gradient(rgba(30, 27, 75, 0.8), rgba(134, 25, 143, 0.7)), 
+                url('https://raw.githubusercontent.com/linmenggann/TrainingWorkshop7/main/%E5%90%B3%E5%9C%92__A1_A%E7%89%88.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-600 to-fuchsia-500 font-sans text-gray-800 relative overflow-x-hidden selection:bg-purple-300 selection:text-purple-900">
+<body class="min-h-screen bg-custom-image font-sans text-gray-800 relative overflow-x-hidden selection:bg-purple-300 selection:text-purple-900">
 
     <!-- 背景漂浮 Emojis -->
     <div class="floating-emoji delay-1">✨</div>
