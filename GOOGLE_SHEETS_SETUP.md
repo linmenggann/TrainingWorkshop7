@@ -25,6 +25,16 @@
 8. 部署後複製 Web App URL。
 9. 回到 `index.html`，將 `GOOGLE_APPS_SCRIPT_URL` 的值改成 Web App URL。
 
+如果有更新 `google-apps-script/Code.gs`，請到 Apps Script 重新部署新版本，否則 GitHub 上的 `dashboard.html` 會讀到舊版 Web App，無法取得 `?action=dashboard` 的報名統計資料。
+
+## 儀表板
+
+- 儀表板檔案：`dashboard.html`
+- 資料來源：Apps Script Web App URL 加上 `?action=dashboard`
+- 顯示內容：總報名數、實體/線上參與人數、主持人數、職類分布、機構分布、最新報名資料。
+
+Apps Script 會支援 JSONP callback，因此 `dashboard.html` 可從 GitHub Pages 直接讀取 Google Apps Script 資料。
+
 ## 前端送出欄位對照
 
 | 前端欄位 name | Google Sheets 表頭 |

@@ -14,14 +14,22 @@ const HEADERS = [
   '來源頁面',
 ];
 
-function doGet() {
+function doGet(e) {
+  const params = e && e.parameter ? e.parameter : {};
   const sheet = getRegistrationSheet_();
+  const payload = params.action === 'dashboard'
+    ? buildDashboardPayload_(sheet)
+    : {
+        ok: true,
+        message: '教學訓練計畫主持人工作坊報名 API 已啟用',
+        sheetName: sheet.getName(),
+      };
 
-  return createJsonResponse_({
-    ok: true,
-    message: '教學訓練計畫主持人工作坊報名 API 已啟用',
-    sheetName: sheet.getName(),
-  });
+  if (params.callback) {
+    return createJsonpResponse_(params.callback, payload);
+  }
+
+  return createJsonResponse_(payload);
 }
 
 function doPost(e) {
@@ -90,8 +98,72 @@ function sanitize_(value) {
   return String(value || '').trim();
 }
 
+function buildDashboardPayload_(sheet) {
+  const range = sheet.getDataRange();
+  const values = range.getValues();
+  const dataRows = values.length > 1 ? values.slice(1).filter((row) => row.some((value) => value !== '')) : [];
+  const rows = dataRows.map((row) => ({
+    submittedAt: formatDate_(row[0]),
+    name: sanitize_(row[1]),
+    organization: sanitize_(row[2]),
+    jobTitle: sanitize_(row[3]),
+    profession: sanitize_(row[4]),
+    isHost: sanitize_(row[5]),
+    participationType: sanitize_(row[6]),
+    email: sanitize_(row[7]),
+    phone: sanitize_(row[8]),
+    sourcePage: sanitize_(row[9]),
+  }));
+  const summary = rows.reduce((acc, row) => {
+    acc.total += 1;
+    incrementCount_(acc.byProfession, row.profession || '未填寫');
+    incrementCount_(acc.byParticipationType, row.participationType || '未填寫');
+    incrementCount_(acc.byHostStatus, row.isHost || '未填寫');
+    incrementCount_(acc.byOrganization, row.organization || '未填寫');
+    return acc;
+  }, {
+    total: 0,
+    byProfession: {},
+    byParticipationType: {},
+    byHostStatus: {},
+    byOrganization: {},
+  });
+
+  return {
+    ok: true,
+    sheetName: sheet.getName(),
+    lastUpdated: formatDate_(new Date()),
+    summary,
+    rows: rows.reverse(),
+  };
+}
+
+function incrementCount_(target, key) {
+  target[key] = (target[key] || 0) + 1;
+}
+
+function formatDate_(value) {
+  if (!value) {
+    return '';
+  }
+
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return sanitize_(value);
+  }
+
+  return Utilities.formatDate(date, Session.getScriptTimeZone(), 'yyyy/MM/dd HH:mm:ss');
+}
+
 function createJsonResponse_(payload) {
   return ContentService
     .createTextOutput(JSON.stringify(payload))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+function createJsonpResponse_(callback, payload) {
+  const safeCallback = String(callback).replace(/[^\w.$]/g, '');
+  return ContentService
+    .createTextOutput(`${safeCallback}(${JSON.stringify(payload)});`)
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
 }
