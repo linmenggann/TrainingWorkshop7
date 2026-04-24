@@ -433,6 +433,28 @@
       line-height: 1.6;
     }
 
+    .capacity-status {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      max-width: 100%;
+      min-height: 42px;
+      margin-top: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      padding: 9px 13px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fef3c7;
+      font-weight: 900;
+      line-height: 1.5;
+    }
+
+    .capacity-status.full {
+      border-color: rgba(251, 113, 133, 0.62);
+      background: rgba(251, 113, 133, 0.18);
+      color: #fecdd3;
+    }
+
     .contact-panel {
       display: grid;
       align-content: space-between;
@@ -636,6 +658,7 @@
         <div class="form-panel">
           <h2 id="register-title">線上報名</h2>
           <p class="hero-copy">填寫後資料會送到 Google Sheets 分頁「工作坊報名資料」。</p>
+          <div class="capacity-status" id="capacityStatus">名額檢查中...</div>
           <form class="registration-form" id="registrationForm" method="POST" target="submitFrame">
             <input type="hidden" name="sourcePage" value="教學訓練計畫主持人工作坊">
 
@@ -751,14 +774,72 @@
 
     const form = document.querySelector("#registrationForm");
     const statusBox = document.querySelector("#formStatus");
+    const capacityStatus = document.querySelector("#capacityStatus");
     const submitButton = document.querySelector("#submitButton");
     const submitFrame = document.querySelector("iframe[name='submitFrame']");
     let hasSubmitted = false;
+    let isRegistrationFull = false;
+
+    function setFormDisabled(disabled) {
+      form.querySelectorAll("input, select, button").forEach((element) => {
+        element.disabled = disabled;
+      });
+    }
+
+    function updateCapacityStatus(payload) {
+      if (!payload || !payload.ok) {
+        capacityStatus.textContent = "目前無法確認剩餘名額，請稍後再試。";
+        return;
+      }
+
+      isRegistrationFull = Boolean(payload.full);
+      capacityStatus.classList.toggle("full", isRegistrationFull);
+
+      if (isRegistrationFull) {
+        setFormDisabled(true);
+        submitButton.textContent = "額滿";
+        statusBox.textContent = "額滿，目前停止受理報名。";
+        capacityStatus.textContent = `額滿｜限額 ${payload.limit} 名，已報名 ${payload.total} 名`;
+        return;
+      }
+
+      setFormDisabled(false);
+      submitButton.textContent = "送出報名資料 🚀";
+      statusBox.textContent = "";
+      capacityStatus.textContent = `開放報名中｜限額 ${payload.limit} 名，目前已報名 ${payload.total} 名，剩餘 ${payload.remaining} 名`;
+    }
+
+    function loadAvailability() {
+      const callbackName = `renderWorkshopAvailability_${Date.now()}`;
+      const script = document.createElement("script");
+      const separator = GOOGLE_APPS_SCRIPT_URL.includes("?") ? "&" : "?";
+
+      window[callbackName] = (payload) => {
+        delete window[callbackName];
+        script.remove();
+        updateCapacityStatus(payload);
+      };
+
+      script.onerror = () => {
+        delete window[callbackName];
+        script.remove();
+        capacityStatus.textContent = "目前無法確認剩餘名額，請稍後再試。";
+      };
+
+      script.src = `${GOOGLE_APPS_SCRIPT_URL}${separator}action=availability&callback=${callbackName}&t=${Date.now()}`;
+      document.body.appendChild(script);
+    }
 
     form.addEventListener("submit", (event) => {
       if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL.includes("PASTE_YOUR")) {
         event.preventDefault();
         statusBox.textContent = "請先將 Apps Script 部署後取得的 Web App URL 貼到 index.html 的 GOOGLE_APPS_SCRIPT_URL。";
+        return;
+      }
+
+      if (isRegistrationFull) {
+        event.preventDefault();
+        statusBox.textContent = "額滿，目前停止受理報名。";
         return;
       }
 
@@ -779,7 +860,10 @@
       submitButton.disabled = false;
       submitButton.textContent = "送出報名資料 🚀";
       statusBox.textContent = "報名資料已送出，請至 Google Sheets 確認資料是否新增。";
+      loadAvailability();
     });
+
+    loadAvailability();
   </script>
 </body>
 </html>

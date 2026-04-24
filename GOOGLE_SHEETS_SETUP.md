@@ -31,9 +31,15 @@
 
 - 儀表板檔案：`dashboard.html`
 - 資料來源：Apps Script Web App URL 加上 `?action=dashboard`
-- 顯示內容：總報名數、實體/線上參與人數、主持人數、職類分布、機構分布、最新報名資料。
+- 顯示內容：總報名數、剩餘名額、實體/線上參與人數、主持人數、職類分布、機構分布、最新報名資料。
 
 Apps Script 會支援 JSONP callback，因此 `dashboard.html` 可從 GitHub Pages 直接讀取 Google Apps Script 資料。
+
+## 名額限制
+
+- 活動限額：4 名。
+- `index.html` 會讀取 Apps Script 的 `?action=availability`，若已滿 4 名會顯示「額滿」並停用報名表單。
+- `google-apps-script/Code.gs` 的 `doPost` 會再次檢查報名筆數，避免前端被略過時仍寫入超過上限的資料。
 
 ## 前端送出欄位對照
 

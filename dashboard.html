@@ -479,6 +479,11 @@
         <div class="metric-value" id="hostCount">0</div>
         <div class="metric-note">目前擔任計畫主持人</div>
       </article>
+      <article class="metric">
+        <div class="metric-label">剩餘名額</div>
+        <div class="metric-value" id="remainingCount">4</div>
+        <div class="metric-note">限額 4 名，額滿即停止受理</div>
+      </article>
     </section>
 
     <section class="dashboard-grid">
@@ -541,6 +546,7 @@
       onsiteCount: document.querySelector("#onsiteCount"),
       onlineCount: document.querySelector("#onlineCount"),
       hostCount: document.querySelector("#hostCount"),
+      remainingCount: document.querySelector("#remainingCount"),
       participationDonut: document.querySelector("#participationDonut"),
       participationLegend: document.querySelector("#participationLegend"),
       hostDonut: document.querySelector("#hostDonut"),
@@ -591,6 +597,7 @@
       elements.onsiteCount.textContent = participation["實體"] || 0;
       elements.onlineCount.textContent = participation["線上"] || 0;
       elements.hostCount.textContent = hostStatus["是"] || 0;
+      elements.remainingCount.textContent = payload.remaining || 0;
 
       renderDonut(elements.participationDonut, elements.participationLegend, participation);
       renderDonut(elements.hostDonut, elements.hostLegend, hostStatus);

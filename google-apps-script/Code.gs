@@ -1,5 +1,6 @@
 const SPREADSHEET_ID = '1vdhgjk6lzSUeP1O-CC73LPAFSpLJlT7E3nKx7At7JMA';
 const SHEET_NAME = '工作坊報名資料';
+const REGISTRATION_LIMIT = 4;
 
 const HEADERS = [
   '提交時間',
@@ -17,13 +18,20 @@ const HEADERS = [
 function doGet(e) {
   const params = e && e.parameter ? e.parameter : {};
   const sheet = getRegistrationSheet_();
-  const payload = params.action === 'dashboard'
-    ? buildDashboardPayload_(sheet)
-    : {
-        ok: true,
-        message: '教學訓練計畫主持人工作坊報名 API 已啟用',
-        sheetName: sheet.getName(),
-      };
+  let payload;
+
+  if (params.action === 'dashboard') {
+    payload = buildDashboardPayload_(sheet);
+  } else if (params.action === 'availability') {
+    payload = buildAvailabilityPayload_(sheet);
+  } else {
+    payload = {
+      ok: true,
+      message: '教學訓練計畫主持人工作坊報名 API 已啟用',
+      sheetName: sheet.getName(),
+      limit: REGISTRATION_LIMIT,
+    };
+  }
 
   if (params.callback) {
     return createJsonpResponse_(params.callback, payload);
@@ -33,7 +41,13 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  const lock = LockService.getScriptLock();
+  let hasLock = false;
+
   try {
+    lock.waitLock(10000);
+    hasLock = true;
+
     const params = e && e.parameter ? e.parameter : {};
     const sheet = getRegistrationSheet_();
     const row = [
@@ -49,6 +63,14 @@ function doPost(e) {
       sanitize_(params.sourcePage),
     ];
 
+    if (getRegistrationCount_(sheet) >= REGISTRATION_LIMIT) {
+      return createJsonResponse_({
+        ok: false,
+        full: true,
+        message: '額滿',
+      });
+    }
+
     validateRequired_(row);
     sheet.appendRow(row);
 
@@ -61,6 +83,10 @@ function doPost(e) {
       ok: false,
       message: error.message,
     });
+  } finally {
+    if (hasLock) {
+      lock.releaseLock();
+    }
   }
 }
 
@@ -133,9 +159,35 @@ function buildDashboardPayload_(sheet) {
     ok: true,
     sheetName: sheet.getName(),
     lastUpdated: formatDate_(new Date()),
+    limit: REGISTRATION_LIMIT,
+    remaining: Math.max(REGISTRATION_LIMIT - summary.total, 0),
+    full: summary.total >= REGISTRATION_LIMIT,
     summary,
     rows: rows.reverse(),
   };
+}
+
+function buildAvailabilityPayload_(sheet) {
+  const count = getRegistrationCount_(sheet);
+  return {
+    ok: true,
+    limit: REGISTRATION_LIMIT,
+    total: count,
+    remaining: Math.max(REGISTRATION_LIMIT - count, 0),
+    full: count >= REGISTRATION_LIMIT,
+    message: count >= REGISTRATION_LIMIT ? '額滿' : '仍可報名',
+    lastUpdated: formatDate_(new Date()),
+  };
+}
+
+function getRegistrationCount_(sheet) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) {
+    return 0;
+  }
+
+  const values = sheet.getRange(2, 1, lastRow - 1, HEADERS.length).getValues();
+  return values.filter((row) => row.some((value) => value !== '')).length;
 }
 
 function incrementCount_(target, key) {
