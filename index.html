@@ -13,7 +13,6 @@
       --cyan: #22d3ee;
       --lime: #bef264;
       --panel: rgba(255, 255, 255, 0.13);
-      --panel-strong: rgba(255, 255, 255, 0.2);
       --line: rgba(255, 255, 255, 0.28);
       --shadow: 0 24px 80px rgba(33, 6, 72, 0.42);
     }
@@ -56,6 +55,12 @@
       text-decoration: none;
     }
 
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
     .page {
       width: min(1180px, calc(100% - 32px));
       margin: 0 auto;
@@ -76,7 +81,6 @@
       align-items: center;
       gap: 10px;
       font-weight: 900;
-      letter-spacing: 0;
     }
 
     .brand-badge {
@@ -126,7 +130,6 @@
       margin: 0;
       font-size: clamp(3rem, 8vw, 6.9rem);
       line-height: 0.95;
-      letter-spacing: 0;
       max-width: 900px;
       text-wrap: balance;
     }
@@ -151,13 +154,14 @@
       align-items: center;
       justify-content: center;
       min-height: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
       border-radius: 8px;
       padding: 13px 18px;
-      border: 1px solid rgba(255, 255, 255, 0.45);
       background: #fff;
       color: #581c87;
       font-weight: 900;
       box-shadow: 0 18px 38px rgba(34, 211, 238, 0.2);
+      cursor: pointer;
     }
 
     .button.secondary {
@@ -165,15 +169,23 @@
       color: var(--ink);
     }
 
+    .info-console,
+    .feature,
+    .form-panel,
+    .contact-panel,
+    .setup-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+    }
+
     .info-console {
       position: relative;
-      border: 1px solid var(--line);
-      background: linear-gradient(160deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08));
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(24px);
-      border-radius: 8px;
       padding: 22px;
       overflow: hidden;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08));
     }
 
     .info-console::before {
@@ -261,7 +273,6 @@
     h2 {
       margin: 0;
       font-size: clamp(2rem, 4vw, 3.6rem);
-      letter-spacing: 0;
     }
 
     .section-heading p {
@@ -277,21 +288,12 @@
       gap: 16px;
     }
 
-    .feature,
-    .form-panel,
-    .contact-panel {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 16px 48px rgba(50, 15, 92, 0.24);
-    }
-
     .feature {
       min-height: 190px;
       padding: 20px;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 16px 48px rgba(50, 15, 92, 0.24);
     }
 
     .feature::after {
@@ -302,7 +304,6 @@
       height: 82px;
       border-radius: 8px;
       background: linear-gradient(135deg, rgba(34, 211, 238, 0.38), rgba(236, 72, 153, 0.34));
-      filter: blur(1px);
       transform: rotate(8deg);
       opacity: 0.5;
     }
@@ -314,13 +315,15 @@
 
     .feature h3,
     .form-panel h3,
-    .contact-panel h3 {
+    .contact-panel h3,
+    .setup-panel h3 {
       margin: 0 0 10px;
       font-size: 1.3rem;
     }
 
     .feature p,
-    .contact-panel p {
+    .contact-panel p,
+    .setup-panel p {
       margin: 0;
       color: var(--muted);
       line-height: 1.8;
@@ -334,69 +337,100 @@
 
     .profession {
       padding: 10px 13px;
-      border-radius: 8px;
       border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 8px;
       background: rgba(255, 255, 255, 0.1);
       font-weight: 800;
     }
 
     .form-layout {
       display: grid;
-      grid-template-columns: 0.95fr 1.05fr;
+      grid-template-columns: 1.15fr 0.85fr;
       gap: 16px;
       align-items: stretch;
     }
 
     .form-panel,
-    .contact-panel {
+    .contact-panel,
+    .setup-panel {
       padding: 22px;
     }
 
-    .field-list {
+    .registration-form {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
+      gap: 14px;
       margin-top: 18px;
     }
 
-    .field {
-      min-height: 74px;
-      border-radius: 8px;
-      padding: 12px;
-      border: 1px dashed rgba(255, 255, 255, 0.32);
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .field.wide {
-      grid-column: 1 / -1;
-    }
-
-    .field span {
-      display: block;
-      color: #decaff;
-      font-size: 0.82rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-
-    .field strong {
-      display: block;
-      font-size: 1rem;
-      line-height: 1.5;
-    }
-
-    .toggle-row {
-      display: flex;
-      flex-wrap: wrap;
+    .form-field {
+      display: grid;
       gap: 8px;
     }
 
-    .toggle {
-      border-radius: 999px;
-      padding: 8px 12px;
-      background: rgba(255, 255, 255, 0.16);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+    .form-field.wide {
+      grid-column: 1 / -1;
+    }
+
+    .form-field label,
+    .option-title {
+      color: #decaff;
+      font-size: 0.9rem;
       font-weight: 900;
+    }
+
+    .form-field input,
+    .form-field select {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      outline: none;
+    }
+
+    .form-field input::placeholder {
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    .form-field select option {
+      color: #2e1065;
+      background: #fff;
+    }
+
+    .radio-card-group {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .radio-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .radio-card input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--lime);
+    }
+
+    .form-status {
+      grid-column: 1 / -1;
+      min-height: 28px;
+      color: var(--lime);
+      font-weight: 900;
+      line-height: 1.6;
     }
 
     .contact-panel {
@@ -404,12 +438,24 @@
       align-content: space-between;
       gap: 18px;
       background: linear-gradient(145deg, rgba(34, 211, 238, 0.17), rgba(236, 72, 153, 0.14));
+      box-shadow: 0 16px 48px rgba(50, 15, 92, 0.24);
     }
 
     .contact-big {
       font-size: clamp(2rem, 4vw, 3.8rem);
       line-height: 1;
       font-weight: 900;
+    }
+
+    .setup-panel {
+      margin-top: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 16px 48px rgba(50, 15, 92, 0.24);
+    }
+
+    .setup-panel code {
+      color: #fef3c7;
+      word-break: break-all;
     }
 
     .footer {
@@ -462,7 +508,8 @@
         font-size: clamp(2.55rem, 16vw, 4.4rem);
       }
 
-      .field-list {
+      .registration-form,
+      .radio-card-group {
         grid-template-columns: 1fr;
       }
     }
@@ -478,7 +525,7 @@
       <div class="nav-links">
         <a href="#info">活動資訊</a>
         <a href="#roles">職類</a>
-        <a href="#register">報名資訊</a>
+        <a href="#register">線上報名</a>
       </div>
     </nav>
 
@@ -487,14 +534,14 @@
         <div class="kicker">
           <span class="chip">🎓 教學部主辦</span>
           <span class="chip">⚡ 實體 / 線上參與</span>
-          <span class="chip">✨ 計畫主持人能量補給</span>
+          <span class="chip">✨ Google Sheets 自動收件</span>
         </div>
         <h1>教學訓練計畫主持人工作坊</h1>
         <p class="hero-copy">
-          一天聚焦教學訓練計畫主持人的實務交流、跨職類連結與行動整理，讓計畫推動更有節奏、更有火花。
+          一天聚焦教學訓練計畫主持人的實務交流、跨職類連結與行動整理，報名資料可直接送入 Google Sheets。
         </p>
         <div class="cta-row">
-          <a class="button" href="#register">查看報名欄位 🔥</a>
+          <a class="button" href="#register">立即填寫 🔥</a>
           <a class="button secondary" href="#info">活動重點 ✨</a>
         </div>
       </div>
@@ -584,44 +631,94 @@
     </section>
 
     <section class="section form-layout" id="register" aria-labelledby="register-title">
-      <div class="form-panel">
-        <h2 id="register-title">報名欄位</h2>
-        <p class="hero-copy">依據原始文件整理出的填寫項目，方便快速確認報名資料。</p>
-        <div class="field-list">
-          <div class="field">
-            <span>姓名</span>
-            <strong>填寫參與者姓名</strong>
-          </div>
-          <div class="field">
-            <span>機構名</span>
-            <strong>填寫服務機構</strong>
-          </div>
-          <div class="field">
-            <span>職稱</span>
-            <strong>填寫目前職稱</strong>
-          </div>
-          <div class="field">
-            <span>Email</span>
-            <strong>填寫電子信箱</strong>
-          </div>
-          <div class="field">
-            <span>聯繫電話</span>
-            <strong>填寫可聯絡電話</strong>
-          </div>
-          <div class="field">
-            <span>是否擔任主持人</span>
-            <div class="toggle-row">
-              <span class="toggle">是</span>
-              <span class="toggle">否</span>
+      <div>
+        <div class="form-panel">
+          <h2 id="register-title">線上報名</h2>
+          <p class="hero-copy">填寫後資料會送到 Google Sheets 分頁「工作坊報名資料」。</p>
+          <form class="registration-form" id="registrationForm" method="POST" target="submitFrame">
+            <input type="hidden" name="sourcePage" value="教學訓練計畫主持人工作坊">
+
+            <div class="form-field">
+              <label for="name">姓名</label>
+              <input id="name" name="name" type="text" placeholder="請輸入姓名" required>
             </div>
-          </div>
-          <div class="field wide">
-            <span>預計參與方式</span>
-            <div class="toggle-row">
-              <span class="toggle">🏢 實體</span>
-              <span class="toggle">💻 線上</span>
+
+            <div class="form-field">
+              <label for="organization">機構名</label>
+              <input id="organization" name="organization" type="text" placeholder="請輸入服務機構" required>
             </div>
-          </div>
+
+            <div class="form-field">
+              <label for="jobTitle">職稱</label>
+              <input id="jobTitle" name="jobTitle" type="text" placeholder="請輸入職稱" required>
+            </div>
+
+            <div class="form-field">
+              <label for="profession">負責的職類</label>
+              <select id="profession" name="profession" required>
+                <option value="">請選擇職類</option>
+                <option>藥事</option>
+                <option>醫事放射</option>
+                <option>醫事檢驗</option>
+                <option>護理</option>
+                <option>營養</option>
+                <option>呼吸治療</option>
+                <option>聽力</option>
+                <option>物理治療</option>
+                <option>職能治療</option>
+                <option>臨床心理</option>
+                <option>語言治療</option>
+                <option>其他</option>
+              </select>
+            </div>
+
+            <div class="form-field wide">
+              <div class="option-title">您目前是否擔任教學訓練計畫主持人</div>
+              <div class="radio-card-group">
+                <label class="radio-card">
+                  <input type="radio" name="isHost" value="是" required>
+                  <span>是</span>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="isHost" value="否">
+                  <span>否</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-field wide">
+              <div class="option-title">您預計以何種方式參與</div>
+              <div class="radio-card-group">
+                <label class="radio-card">
+                  <input type="radio" name="participationType" value="實體" required>
+                  <span>🏢 實體</span>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="participationType" value="線上">
+                  <span>💻 線上</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="form-field">
+              <label for="phone">聯繫電話</label>
+              <input id="phone" name="phone" type="tel" placeholder="請輸入聯繫電話" required>
+            </div>
+
+            <button class="button" id="submitButton" type="submit">送出報名資料 🚀</button>
+            <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+          </form>
+          <iframe name="submitFrame" title="表單送出結果" hidden></iframe>
+        </div>
+
+        <div class="setup-panel">
+          <h3>Google Sheets 串接設定</h3>
+          <p>部署 Apps Script 後，將 Web App URL 貼到本檔案底部的 <code>GOOGLE_APPS_SCRIPT_URL</code> 常數即可啟用正式送出。</p>
         </div>
       </div>
 
@@ -647,5 +744,41 @@
       <span>奇美醫院教學部 · 2026/01/25</span>
     </footer>
   </main>
+
+  <script>
+    const GOOGLE_APPS_SCRIPT_URL = "PASTE_YOUR_DEPLOYED_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+    const form = document.querySelector("#registrationForm");
+    const statusBox = document.querySelector("#formStatus");
+    const submitButton = document.querySelector("#submitButton");
+    const submitFrame = document.querySelector("iframe[name='submitFrame']");
+    let hasSubmitted = false;
+
+    form.addEventListener("submit", (event) => {
+      if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL.includes("PASTE_YOUR")) {
+        event.preventDefault();
+        statusBox.textContent = "請先將 Apps Script 部署後取得的 Web App URL 貼到 index.html 的 GOOGLE_APPS_SCRIPT_URL。";
+        return;
+      }
+
+      form.action = GOOGLE_APPS_SCRIPT_URL;
+      hasSubmitted = true;
+      submitButton.disabled = true;
+      submitButton.textContent = "送出中...";
+      statusBox.textContent = "資料送出中，請稍候。";
+    });
+
+    submitFrame.addEventListener("load", () => {
+      if (!hasSubmitted) {
+        return;
+      }
+
+      hasSubmitted = false;
+      form.reset();
+      submitButton.disabled = false;
+      submitButton.textContent = "送出報名資料 🚀";
+      statusBox.textContent = "報名資料已送出，請至 Google Sheets 確認資料是否新增。";
+    });
+  </script>
 </body>
 </html>
