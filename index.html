@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教學訓練計畫主持人工作坊</title>
+  <style>
+    :root {
+      --ink: #fff8ff;
+      --muted: #ead9ff;
+      --violet: #7c3aed;
+      --magenta: #ec4899;
+      --cyan: #22d3ee;
+      --lime: #bef264;
+      --panel: rgba(255, 255, 255, 0.13);
+      --panel-strong: rgba(255, 255, 255, 0.2);
+      --line: rgba(255, 255, 255, 0.28);
+      --shadow: 0 24px 80px rgba(33, 6, 72, 0.42);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(34, 211, 238, 0.32), transparent 28rem),
+        radial-gradient(circle at 88% 10%, rgba(236, 72, 153, 0.38), transparent 26rem),
+        radial-gradient(circle at 62% 88%, rgba(190, 242, 100, 0.18), transparent 24rem),
+        linear-gradient(135deg, #2e1065 0%, #6d28d9 38%, #a21caf 68%, #4c1d95 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 26px 0 52px;
+      position: relative;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0 36px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--cyan), var(--magenta));
+      box-shadow: 0 12px 34px rgba(34, 211, 238, 0.3);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .nav-links a,
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(18px);
+      font-size: 0.95rem;
+    }
+
+    .hero {
+      min-height: calc(100vh - 120px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      gap: 34px;
+      align-items: center;
+      padding-bottom: 48px;
+    }
+
+    .kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3rem, 8vw, 6.9rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+      max-width: 900px;
+      text-wrap: balance;
+    }
+
+    .hero-copy {
+      max-width: 690px;
+      margin: 24px 0 30px;
+      color: var(--muted);
+      font-size: clamp(1.08rem, 2vw, 1.32rem);
+      line-height: 1.85;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      border-radius: 8px;
+      padding: 13px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      background: #fff;
+      color: #581c87;
+      font-weight: 900;
+      box-shadow: 0 18px 38px rgba(34, 211, 238, 0.2);
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--ink);
+    }
+
+    .info-console {
+      position: relative;
+      border: 1px solid var(--line);
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.08));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px);
+      border-radius: 8px;
+      padding: 22px;
+      overflow: hidden;
+    }
+
+    .info-console::before {
+      content: "✨";
+      position: absolute;
+      top: 8px;
+      right: 18px;
+      font-size: 5rem;
+      opacity: 0.26;
+      transform: rotate(10deg);
+    }
+
+    .console-top {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 99px;
+      background: var(--magenta);
+    }
+
+    .dot:nth-child(2) {
+      background: var(--lime);
+    }
+
+    .dot:nth-child(3) {
+      background: var(--cyan);
+    }
+
+    .event-card {
+      display: grid;
+      gap: 14px;
+    }
+
+    .event-item {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .emoji {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      font-size: 1.45rem;
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .label {
+      color: #d8c4ff;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .value {
+      margin-top: 3px;
+      font-size: 1.04rem;
+      font-weight: 900;
+      line-height: 1.45;
+    }
+
+    .section {
+      padding: 54px 0;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      letter-spacing: 0;
+    }
+
+    .section-heading p {
+      margin: 0;
+      max-width: 460px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .feature,
+    .form-panel,
+    .contact-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 16px 48px rgba(50, 15, 92, 0.24);
+    }
+
+    .feature {
+      min-height: 190px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature::after {
+      content: "";
+      position: absolute;
+      inset: auto 16px 16px auto;
+      width: 82px;
+      height: 82px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.38), rgba(236, 72, 153, 0.34));
+      filter: blur(1px);
+      transform: rotate(8deg);
+      opacity: 0.5;
+    }
+
+    .feature-icon {
+      font-size: 2.6rem;
+      margin-bottom: 16px;
+    }
+
+    .feature h3,
+    .form-panel h3,
+    .contact-panel h3 {
+      margin: 0 0 10px;
+      font-size: 1.3rem;
+    }
+
+    .feature p,
+    .contact-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .professions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .profession {
+      padding: 10px 13px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      background: rgba(255, 255, 255, 0.1);
+      font-weight: 800;
+    }
+
+    .form-layout {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .form-panel,
+    .contact-panel {
+      padding: 22px;
+    }
+
+    .field-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .field {
+      min-height: 74px;
+      border-radius: 8px;
+      padding: 12px;
+      border: 1px dashed rgba(255, 255, 255, 0.32);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .field.wide {
+      grid-column: 1 / -1;
+    }
+
+    .field span {
+      display: block;
+      color: #decaff;
+      font-size: 0.82rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .field strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .toggle-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .toggle {
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      font-weight: 900;
+    }
+
+    .contact-panel {
+      display: grid;
+      align-content: space-between;
+      gap: 18px;
+      background: linear-gradient(145deg, rgba(34, 211, 238, 0.17), rgba(236, 72, 153, 0.14));
+    }
+
+    .contact-big {
+      font-size: clamp(2rem, 4vw, 3.8rem);
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 24px 0 0;
+      color: #dcc7ff;
+      border-top: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    @media (max-width: 920px) {
+      .hero,
+      .form-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading {
+        display: block;
+      }
+
+      .section-heading p {
+        margin-top: 12px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(100% - 24px, 1180px);
+        padding-top: 12px;
+      }
+
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding-bottom: 22px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 18px 0 34px;
+      }
+
+      h1 {
+        font-size: clamp(2.55rem, 16vw, 4.4rem);
+      }
+
+      .field-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="nav" aria-label="頁面導覽">
+      <a class="brand" href="#top" aria-label="教學訓練計畫主持人工作坊首頁">
+        <span class="brand-badge">🚀</span>
+        <span>Training Workshop</span>
+      </a>
+      <div class="nav-links">
+        <a href="#info">活動資訊</a>
+        <a href="#roles">職類</a>
+        <a href="#register">報名資訊</a>
+      </div>
+    </nav>
+
+    <section class="hero" id="top">
+      <div>
+        <div class="kicker">
+          <span class="chip">🎓 教學部主辦</span>
+          <span class="chip">⚡ 實體 / 線上參與</span>
+          <span class="chip">✨ 計畫主持人能量補給</span>
+        </div>
+        <h1>教學訓練計畫主持人工作坊</h1>
+        <p class="hero-copy">
+          一天聚焦教學訓練計畫主持人的實務交流、跨職類連結與行動整理，讓計畫推動更有節奏、更有火花。
+        </p>
+        <div class="cta-row">
+          <a class="button" href="#register">查看報名欄位 🔥</a>
+          <a class="button secondary" href="#info">活動重點 ✨</a>
+        </div>
+      </div>
+
+      <aside class="info-console" id="info" aria-label="活動資訊">
+        <div class="console-top" aria-hidden="true">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        <div class="event-card">
+          <div class="event-item">
+            <div class="emoji">📅</div>
+            <div>
+              <div class="label">日期</div>
+              <div class="value">2026/01/25</div>
+            </div>
+          </div>
+          <div class="event-item">
+            <div class="emoji">⏰</div>
+            <div>
+              <div class="label">時間</div>
+              <div class="value">09:00 ~ 16:00</div>
+            </div>
+          </div>
+          <div class="event-item">
+            <div class="emoji">📍</div>
+            <div>
+              <div class="label">地點</div>
+              <div class="value">奇美醫院第五醫療大樓 6 樓 563 會議室</div>
+            </div>
+          </div>
+          <div class="event-item">
+            <div class="emoji">🏥</div>
+            <div>
+              <div class="label">主辦單位</div>
+              <div class="value">奇美醫院教學部</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="highlights-title">
+      <div class="section-heading">
+        <h2 id="highlights-title">工作坊亮點</h2>
+        <p>以計畫主持人的實務需求為核心，把參與方式、角色資訊與聯繫管道整理成快速掌握的視覺版面。</p>
+      </div>
+      <div class="grid">
+        <article class="feature">
+          <div class="feature-icon">🧠</div>
+          <h3>教學訓練聚焦</h3>
+          <p>面向各職類計畫主持人，凝聚教學訓練推動所需的資訊與溝通節點。</p>
+        </article>
+        <article class="feature">
+          <div class="feature-icon">🌈</div>
+          <h3>跨職類串聯</h3>
+          <p>藥事、護理、檢驗、治療與心理等團隊都能在同一個場域交流。</p>
+        </article>
+        <article class="feature">
+          <div class="feature-icon">💬</div>
+          <h3>彈性參與</h3>
+          <p>可選擇實體或線上參與，讓不同院所與角色都能接上節奏。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="roles" aria-labelledby="roles-title">
+      <div class="section-heading">
+        <h2 id="roles-title">適用職類</h2>
+        <p>報名時可選擇目前負責的職類，也保留其他類別讓更多教學訓練夥伴加入。</p>
+      </div>
+      <div class="professions" aria-label="職類列表">
+        <span class="profession">💊 藥事</span>
+        <span class="profession">🩻 醫事放射</span>
+        <span class="profession">🧪 醫事檢驗</span>
+        <span class="profession">🩺 護理</span>
+        <span class="profession">🥗 營養</span>
+        <span class="profession">🫁 呼吸治療</span>
+        <span class="profession">👂 聽力</span>
+        <span class="profession">🏃 物理治療</span>
+        <span class="profession">🤲 職能治療</span>
+        <span class="profession">🧩 臨床心理</span>
+        <span class="profession">🗣️ 語言治療</span>
+        <span class="profession">➕ 其他</span>
+      </div>
+    </section>
+
+    <section class="section form-layout" id="register" aria-labelledby="register-title">
+      <div class="form-panel">
+        <h2 id="register-title">報名欄位</h2>
+        <p class="hero-copy">依據原始文件整理出的填寫項目，方便快速確認報名資料。</p>
+        <div class="field-list">
+          <div class="field">
+            <span>姓名</span>
+            <strong>填寫參與者姓名</strong>
+          </div>
+          <div class="field">
+            <span>機構名</span>
+            <strong>填寫服務機構</strong>
+          </div>
+          <div class="field">
+            <span>職稱</span>
+            <strong>填寫目前職稱</strong>
+          </div>
+          <div class="field">
+            <span>Email</span>
+            <strong>填寫電子信箱</strong>
+          </div>
+          <div class="field">
+            <span>聯繫電話</span>
+            <strong>填寫可聯絡電話</strong>
+          </div>
+          <div class="field">
+            <span>是否擔任主持人</span>
+            <div class="toggle-row">
+              <span class="toggle">是</span>
+              <span class="toggle">否</span>
+            </div>
+          </div>
+          <div class="field wide">
+            <span>預計參與方式</span>
+            <div class="toggle-row">
+              <span class="toggle">🏢 實體</span>
+              <span class="toggle">💻 線上</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="contact-panel" aria-label="聯絡資訊">
+        <div>
+          <div class="contact-big">Need help?</div>
+          <h3>聯絡窗口</h3>
+          <p>聯絡人：陳大頭</p>
+          <p>電話：06-281-2811 分機 57112233</p>
+        </div>
+        <div class="event-item">
+          <div class="emoji">📣</div>
+          <div>
+            <div class="label">提醒</div>
+            <div class="value">報名前請確認職類、主持人身分與參與方式。</div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="footer">
+      <span>教學訓練計畫主持人工作坊</span>
+      <span>奇美醫院教學部 · 2026/01/25</span>
+    </footer>
+  </main>
+</body>
+</html>
