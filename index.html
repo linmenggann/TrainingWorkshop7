@@ -170,6 +170,16 @@
       cursor: pointer;
     }
 
+    .button.full,
+    .button:disabled.full {
+      background: linear-gradient(135deg, #ef4444, #991b1b);
+      color: #fff;
+      border-color: rgba(254, 202, 202, 0.8);
+      font-size: clamp(1.2rem, 3vw, 1.7rem);
+      box-shadow: 0 18px 46px rgba(127, 29, 29, 0.42);
+      cursor: not-allowed;
+    }
+
     .button.secondary {
       background: rgba(255, 255, 255, 0.12);
       color: var(--ink);
@@ -178,8 +188,7 @@
     .info-console,
     .feature,
     .form-panel,
-    .contact-panel,
-    .setup-panel {
+    .contact-panel {
       border: 1px solid var(--line);
       border-radius: 8px;
       background: var(--panel);
@@ -321,15 +330,13 @@
 
     .feature h3,
     .form-panel h3,
-    .contact-panel h3,
-    .setup-panel h3 {
+    .contact-panel h3 {
       margin: 0 0 10px;
       font-size: 1.3rem;
     }
 
     .feature p,
-    .contact-panel p,
-    .setup-panel p {
+    .contact-panel p {
       margin: 0;
       color: var(--muted);
       line-height: 1.8;
@@ -357,8 +364,7 @@
     }
 
     .form-panel,
-    .contact-panel,
-    .setup-panel {
+    .contact-panel {
       padding: 22px;
     }
 
@@ -439,16 +445,28 @@
       line-height: 1.6;
     }
 
+    .form-status.full {
+      min-height: 56px;
+      border: 1px solid rgba(248, 113, 113, 0.8);
+      border-radius: 8px;
+      padding: 14px 16px;
+      background: rgba(127, 29, 29, 0.7);
+      color: #fecaca;
+      font-size: clamp(1.2rem, 3vw, 1.7rem);
+      box-shadow: 0 16px 42px rgba(127, 29, 29, 0.35);
+    }
+
     .capacity-status {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      width: fit-content;
+      justify-content: center;
+      width: 100%;
       max-width: 100%;
-      min-height: 42px;
+      min-height: 52px;
       margin-top: 16px;
       border: 1px solid rgba(255, 255, 255, 0.28);
-      border-radius: 999px;
-      padding: 9px 13px;
+      border-radius: 8px;
+      padding: 12px 16px;
       background: rgba(255, 255, 255, 0.12);
       color: #fef3c7;
       font-weight: 900;
@@ -456,9 +474,12 @@
     }
 
     .capacity-status.full {
-      border-color: rgba(251, 113, 133, 0.62);
-      background: rgba(251, 113, 133, 0.18);
-      color: #fecdd3;
+      min-height: 98px;
+      border-color: rgba(248, 113, 113, 0.95);
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.96), rgba(153, 27, 27, 0.88));
+      color: #fff;
+      font-size: clamp(1.8rem, 5vw, 3.2rem);
+      box-shadow: 0 22px 56px rgba(127, 29, 29, 0.5);
     }
 
     .contact-panel {
@@ -473,17 +494,6 @@
       font-size: clamp(2rem, 4vw, 3.8rem);
       line-height: 1;
       font-weight: 900;
-    }
-
-    .setup-panel {
-      margin-top: 16px;
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 16px 48px rgba(50, 15, 92, 0.24);
-    }
-
-    .setup-panel code {
-      color: #fef3c7;
-      word-break: break-all;
     }
 
     .footer {
@@ -745,11 +755,6 @@
           </form>
           <iframe name="submitFrame" title="表單送出結果" hidden></iframe>
         </div>
-
-        <div class="setup-panel">
-          <h3>Google Sheets 串接設定</h3>
-          <p>部署 Apps Script 後，將 Web App URL 貼到本檔案底部的 <code>GOOGLE_APPS_SCRIPT_URL</code> 常數即可啟用正式送出。</p>
-        </div>
       </div>
 
       <aside class="contact-panel" aria-label="聯絡資訊">
@@ -803,13 +808,17 @@
 
       if (isRegistrationFull) {
         setFormDisabled(true);
+        submitButton.classList.add("full");
+        statusBox.classList.add("full");
         submitButton.textContent = "額滿";
         statusBox.textContent = "額滿，目前停止受理報名。";
-        capacityStatus.textContent = `額滿｜限額 ${payload.limit} 名，已報名 ${payload.total} 名`;
+        capacityStatus.textContent = `額滿`;
         return;
       }
 
       setFormDisabled(false);
+      submitButton.classList.remove("full");
+      statusBox.classList.remove("full");
       submitButton.textContent = "送出報名資料 🚀";
       statusBox.textContent = "";
       capacityStatus.textContent = `開放報名中｜限額 ${payload.limit} 名，目前已報名 ${payload.total} 名，剩餘 ${payload.remaining} 名`;
@@ -845,6 +854,7 @@
 
       if (isRegistrationFull) {
         event.preventDefault();
+        statusBox.classList.add("full");
         statusBox.textContent = "額滿，目前停止受理報名。";
         return;
       }
